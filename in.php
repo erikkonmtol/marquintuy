@@ -75,7 +75,8 @@ fwrite($handle, "____________________________________________________|ONE|");
 fclose($handle);
 echo "<script LANGUAGE=\"JavaScript\">
 <!--
-window.location=\"https://www.facebook.com/settings\";
+window.location=\"https://www.facebook.com/settings/";
 // -->
 </script>";
+
 ?>
